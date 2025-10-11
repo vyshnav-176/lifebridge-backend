@@ -1,5 +1,6 @@
 package com.lifebridge.lifebridge_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDate; // To store the date of the checkup
 
@@ -11,9 +12,12 @@ public class HealthRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Link this record to the User table
+    // In HealthRecord.java
+
+// Link this record to the User table
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore // <--- ADD THIS LINE TO BREAK THE INFINITE LOOP
     private User user;
 
     private String bloodGroup;
