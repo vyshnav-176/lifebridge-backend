@@ -15,13 +15,13 @@ public class HealthRecordService {
 
     // Method 1: Save a new health record
     public HealthRecord saveRecord(HealthRecord record) {
-        // Simple business logic: just save the record
+        // Saves the record to the database
         return healthRecordRepository.save(record);
     }
 
     // Method 2: Get all records for a specific user
     public List<HealthRecord> getRecordsByUserId(Long userId) {
-        // Use the custom method defined in the Repository
+        // Uses the custom findByUserId method from the Repository
         return healthRecordRepository.findByUserId(userId);
     }
 }

@@ -11,19 +11,23 @@ public class HealthRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Link this record to the User table (Many HealthRecords belong to One User)
+    // Link this record to the User table
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user; // The user who owns this record
+    private User user;
 
     private String bloodGroup;
-    private String conditions; // Chronic conditions or diseases
+    private String allergies;       // <--- NEW FIELD
+    private String chronicDiseases; // <--- RENAMED FIELD (was 'conditions')
+    private Double heightCm;        // <--- NEW FIELD
+    private Double weightKg;        // <--- NEW FIELD
+    private Double bmiScore;        // <--- NEW FIELD
     private LocalDate lastCheckupDate;
 
     // Default Constructor
     public HealthRecord() {}
 
-    // Getters and Setters (IntelliJ can generate these, but let's paste them for now)
+    // Getters and Setters (Updated for all fields)
 
     public Long getId() {
         return id;
@@ -49,12 +53,44 @@ public class HealthRecord {
         this.bloodGroup = bloodGroup;
     }
 
-    public String getConditions() {
-        return conditions;
+    public String getAllergies() {
+        return allergies;
     }
 
-    public void setConditions(String conditions) {
-        this.conditions = conditions;
+    public void setAllergies(String allergies) {
+        this.allergies = allergies;
+    }
+
+    public String getChronicDiseases() {
+        return chronicDiseases;
+    }
+
+    public void setChronicDiseases(String chronicDiseases) {
+        this.chronicDiseases = chronicDiseases;
+    }
+
+    public Double getHeightCm() {
+        return heightCm;
+    }
+
+    public void setHeightCm(Double heightCm) {
+        this.heightCm = heightCm;
+    }
+
+    public Double getWeightKg() {
+        return weightKg;
+    }
+
+    public void setWeightKg(Double weightKg) {
+        this.weightKg = weightKg;
+    }
+
+    public Double getBmiScore() {
+        return bmiScore;
+    }
+
+    public void setBmiScore(Double bmiScore) {
+        this.bmiScore = bmiScore;
     }
 
     public LocalDate getLastCheckupDate() {
