@@ -46,4 +46,10 @@ public class UserService {
         // Failure: user not found or password doesn't match
         return null;
     }
+    // In UserService.java (add this new method)
+
+    public User findById(Long userId) {
+        // Uses the default findById method from JpaRepository (inherited by UserRepository)
+        return userRepository.findById(userId).orElse(null);
+    }
 }
