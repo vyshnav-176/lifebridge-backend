@@ -1,8 +1,8 @@
 package com.lifebridge.lifebridge_backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import java.time.LocalDate; // To store the date of the checkup
 
 @Entity
 @Table(name = "health_records")
@@ -12,26 +12,27 @@ public class HealthRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // In HealthRecord.java
-
-// Link this record to the User table
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore // <--- ADD THIS LINE TO BREAK THE INFINITE LOOP
+    @JsonIgnore
     private User user;
 
     private String bloodGroup;
-    private String allergies;       // <--- NEW FIELD
-    private String chronicDiseases; // <--- RENAMED FIELD (was 'conditions')
-    private Double heightCm;        // <--- NEW FIELD
-    private Double weightKg;        // <--- NEW FIELD
-    private Double bmiScore;        // <--- NEW FIELD
-    private LocalDate lastCheckupDate;
+    private String allergies;
+    private String medicalConditions;
+    private Double height;
+    private Double weight;
+
+    // This property handles the incoming JSON payload's nested user object
+    @JsonProperty("user")
+    private void unpackNestedUser(User user) {
+        this.user = user;
+    }
 
     // Default Constructor
     public HealthRecord() {}
 
-    // Getters and Setters (Updated for all fields)
+    // Getters and Setters
 
     public Long getId() {
         return id;
@@ -65,43 +66,27 @@ public class HealthRecord {
         this.allergies = allergies;
     }
 
-    public String getChronicDiseases() {
-        return chronicDiseases;
+    public String getMedicalConditions() {
+        return medicalConditions;
     }
 
-    public void setChronicDiseases(String chronicDiseases) {
-        this.chronicDiseases = chronicDiseases;
+    public void setMedicalConditions(String medicalConditions) {
+        this.medicalConditions = medicalConditions;
     }
 
-    public Double getHeightCm() {
-        return heightCm;
+    public Double getHeight() {
+        return height;
     }
 
-    public void setHeightCm(Double heightCm) {
-        this.heightCm = heightCm;
+    public void setHeight(Double height) {
+        this.height = height;
     }
 
-    public Double getWeightKg() {
-        return weightKg;
+    public Double getWeight() {
+        return weight;
     }
 
-    public void setWeightKg(Double weightKg) {
-        this.weightKg = weightKg;
-    }
-
-    public Double getBmiScore() {
-        return bmiScore;
-    }
-
-    public void setBmiScore(Double bmiScore) {
-        this.bmiScore = bmiScore;
-    }
-
-    public LocalDate getLastCheckupDate() {
-        return lastCheckupDate;
-    }
-
-    public void setLastCheckupDate(LocalDate lastCheckupDate) {
-        this.lastCheckupDate = lastCheckupDate;
+    public void setWeight(Double weight) {
+        this.weight = weight;
     }
 }

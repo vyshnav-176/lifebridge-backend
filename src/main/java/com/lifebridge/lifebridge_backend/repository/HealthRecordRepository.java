@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface HealthRecordRepository extends JpaRepository<HealthRecord, Long> {
 
-    // Spring Data JPA magic: automatically creates a query to find all records by user ID
-    List<HealthRecord> findByUserId(Long userId);
+    // Corrected query to find by the 'id' property of the 'user' object
+    List<HealthRecord> findByUser_Id(Long userId);
 }
