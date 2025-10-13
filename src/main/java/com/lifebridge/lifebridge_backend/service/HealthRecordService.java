@@ -7,7 +7,6 @@ import com.lifebridge.lifebridge_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,18 +18,31 @@ public class HealthRecordService {
     @Autowired
     private UserRepository userRepository;
 
-    public HealthRecord saveRecord(HealthRecord record) {
-        Optional<User> userOptional = userRepository.findById(record.getUser().getId());
+    public HealthRecord saveOrUpdateRecord(Long userId, HealthRecord record) {
+        Optional<User> userOptional = userRepository.findById(userId);
 
         if (userOptional.isPresent()) {
-            record.setUser(userOptional.get());
-            return healthRecordRepository.save(record);
+            User user = userOptional.get();
+
+            HealthRecord existingRecord = healthRecordRepository.findByUser_Id(user.getId());
+
+            if (existingRecord != null) {
+                existingRecord.setBloodGroup(record.getBloodGroup());
+                existingRecord.setAllergies(record.getAllergies());
+                existingRecord.setMedicalConditions(record.getMedicalConditions());
+                existingRecord.setHeight(record.getHeight());
+                existingRecord.setWeight(record.getWeight());
+                return healthRecordRepository.save(existingRecord);
+            } else {
+                record.setUser(user);
+                return healthRecordRepository.save(record);
+            }
         } else {
-            throw new RuntimeException("User not found with ID: " + record.getUser().getId());
+            throw new RuntimeException("User not found with ID: " + userId);
         }
     }
 
-    public List<HealthRecord> getRecordsByUserId(Long userId) {
+    public HealthRecord getRecordByUserId(Long userId) {
         return healthRecordRepository.findByUser_Id(userId);
     }
 }
