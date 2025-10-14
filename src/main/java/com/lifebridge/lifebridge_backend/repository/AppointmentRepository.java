@@ -8,8 +8,5 @@ import java.util.List;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
-
-    // Custom method to find all appointments associated with a specific user ID
-    // Spring Data JPA uses the property name (findByUserId) to generate the SQL query.
-    List<Appointment> findByUserId(Long userId);
+    List<Appointment> findByUser_Id(Long userId);
 }

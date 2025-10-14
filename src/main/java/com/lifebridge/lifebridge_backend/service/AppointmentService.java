@@ -1,11 +1,14 @@
 package com.lifebridge.lifebridge_backend.service;
 
 import com.lifebridge.lifebridge_backend.entity.Appointment;
+import com.lifebridge.lifebridge_backend.entity.User;
 import com.lifebridge.lifebridge_backend.repository.AppointmentRepository;
+import com.lifebridge.lifebridge_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AppointmentService {
@@ -13,30 +16,30 @@ public class AppointmentService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    // Method 1: Save a new appointment (Book)
+    @Autowired
+    private UserRepository userRepository;
+
     public Appointment saveAppointment(Appointment appointment) {
-        // When a new appointment is saved, ensure the status is set to PENDING
-        appointment.setStatus("PENDING");
-        return appointmentRepository.save(appointment);
+        // Link the user to the appointment before saving
+        Optional<User> userOptional = userRepository.findById(appointment.getUser().getId());
+        if (userOptional.isPresent()) {
+            appointment.setUser(userOptional.get());
+            appointment.setStatus("PENDING"); // Default status
+            return appointmentRepository.save(appointment);
+        }
+        throw new RuntimeException("User not found with ID: " + appointment.getUser().getId());
     }
 
-    // Method 2: Get all appointments for a specific user (History)
     public List<Appointment> getAppointmentsByUserId(Long userId) {
-        // Uses the custom findByUserId method from the Repository
-        return appointmentRepository.findByUserId(userId);
+        return appointmentRepository.findByUser_Id(userId);
     }
-    // In AppointmentService.java
 
-    // New Method 3: Update the status of an existing appointment
     public Appointment updateStatus(Long appointmentId, String newStatus) {
-        // Find the appointment by its ID
         return appointmentRepository.findById(appointmentId)
                 .map(appointment -> {
-                    // If found, update the status field
                     appointment.setStatus(newStatus);
-                    // Save the updated appointment back to the database
                     return appointmentRepository.save(appointment);
                 })
-                .orElse(null); // Return null if the appointment ID is not found
+                .orElse(null);
     }
 }
