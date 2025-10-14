@@ -1,8 +1,9 @@
 package com.lifebridge.lifebridge_backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore; // Needed for the User relationship
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import java.time.LocalTime; // To store the time of the reminder
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "reminders")
@@ -12,21 +13,25 @@ public class Reminder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Link this record to the User table
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore // Breaks the loop, same as HealthRecord
+    @JsonIgnore
     private User user;
 
     private String medicineName;
-    private String dosage; // e.g., "1 tablet", "5 ml"
-    private LocalTime reminderTime; // The time the reminder should fire
-    private Boolean isActive = true; // Flag to enable/disable the reminder
+    private String dosage;
+    private LocalTime reminderTime;
+    private Boolean isActive = true;
 
-    // Default Constructor
+    // This property handles the incoming JSON payload's nested user object
+    @JsonProperty("user")
+    private void unpackNestedUser(User user) {
+        this.user = user;
+    }
+
     public Reminder() {}
 
-    // Getters and Setters (IntelliJ can generate these, but paste for now)
+    // Getters and Setters
 
     public Long getId() {
         return id;
