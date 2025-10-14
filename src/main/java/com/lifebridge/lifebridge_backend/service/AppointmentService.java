@@ -20,11 +20,10 @@ public class AppointmentService {
     private UserRepository userRepository;
 
     public Appointment saveAppointment(Appointment appointment) {
-        // Link the user to the appointment before saving
         Optional<User> userOptional = userRepository.findById(appointment.getUser().getId());
         if (userOptional.isPresent()) {
             appointment.setUser(userOptional.get());
-            appointment.setStatus("PENDING"); // Default status
+            appointment.setStatus("PENDING");
             return appointmentRepository.save(appointment);
         }
         throw new RuntimeException("User not found with ID: " + appointment.getUser().getId());
