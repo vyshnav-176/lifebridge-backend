@@ -43,4 +43,10 @@ public class ReminderController {
         }
         return new ResponseEntity<>(updatedReminder, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReminder(@PathVariable Long id) {
+        reminderService.deleteReminder(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

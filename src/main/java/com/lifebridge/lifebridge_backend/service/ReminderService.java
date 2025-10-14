@@ -42,4 +42,8 @@ public class ReminderService {
                 })
                 .orElse(null);
     }
+
+    public void deleteReminder(Long id) {
+        reminderRepository.deleteById(id);
+    }
 }

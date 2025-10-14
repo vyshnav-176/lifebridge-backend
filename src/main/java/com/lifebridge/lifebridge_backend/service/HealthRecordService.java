@@ -18,28 +18,29 @@ public class HealthRecordService {
     @Autowired
     private UserRepository userRepository;
 
-    public HealthRecord saveOrUpdateRecord(Long userId, HealthRecord record) {
+    // Method to save a new record (used by POST)
+    public HealthRecord saveRecord(Long userId, HealthRecord record) {
         Optional<User> userOptional = userRepository.findById(userId);
 
         if (userOptional.isPresent()) {
-            User user = userOptional.get();
-
-            HealthRecord existingRecord = healthRecordRepository.findByUser_Id(user.getId());
-
-            if (existingRecord != null) {
-                existingRecord.setBloodGroup(record.getBloodGroup());
-                existingRecord.setAllergies(record.getAllergies());
-                existingRecord.setMedicalConditions(record.getMedicalConditions());
-                existingRecord.setHeight(record.getHeight());
-                existingRecord.setWeight(record.getWeight());
-                return healthRecordRepository.save(existingRecord);
-            } else {
-                record.setUser(user);
-                return healthRecordRepository.save(record);
-            }
-        } else {
-            throw new RuntimeException("User not found with ID: " + userId);
+            record.setUser(userOptional.get());
+            return healthRecordRepository.save(record);
         }
+        throw new RuntimeException("User not found with ID: " + userId);
+    }
+
+    // NEW: Method to update an existing record
+    public HealthRecord updateRecord(Long userId, HealthRecord updatedRecord) {
+        HealthRecord existingRecord = healthRecordRepository.findByUser_Id(userId);
+        if (existingRecord != null) {
+            existingRecord.setBloodGroup(updatedRecord.getBloodGroup());
+            existingRecord.setAllergies(updatedRecord.getAllergies());
+            existingRecord.setMedicalConditions(updatedRecord.getMedicalConditions());
+            existingRecord.setHeight(updatedRecord.getHeight());
+            existingRecord.setWeight(updatedRecord.getWeight());
+            return healthRecordRepository.save(existingRecord);
+        }
+        throw new RuntimeException("Health record not found for user ID: " + userId);
     }
 
     public HealthRecord getRecordByUserId(Long userId) {

@@ -23,15 +23,12 @@ public class Reminder {
     private LocalTime reminderTime;
     private Boolean isActive = true;
 
-    // This property handles the incoming JSON payload's nested user object
     @JsonProperty("user")
     private void unpackNestedUser(User user) {
         this.user = user;
     }
 
     public Reminder() {}
-
-    // Getters and Setters
 
     public Long getId() {
         return id;
