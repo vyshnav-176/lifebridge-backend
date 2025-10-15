@@ -12,12 +12,12 @@ public class Doctor {
 
     private String name;
     private String specialty;
-    private Boolean available = true; // Maps to frontend's 'available' field
+    private Boolean available = true;
 
     // Default Constructor
     public Doctor() {}
 
-    // Getters and Setters (IntelliJ can generate these)
+    // Getters and Setters
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

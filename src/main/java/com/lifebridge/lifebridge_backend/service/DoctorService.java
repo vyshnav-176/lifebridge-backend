@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DoctorService {
@@ -13,13 +14,27 @@ public class DoctorService {
     @Autowired
     private DoctorRepository doctorRepository;
 
-    // Method to get the list of all doctors (for the frontend screen)
     public List<Doctor> findAllDoctors() {
         return doctorRepository.findAll();
     }
 
-    // Optional: Method to save doctors (for initial setup)
     public Doctor saveDoctor(Doctor doctor) {
         return doctorRepository.save(doctor);
+    }
+
+    public Optional<Doctor> findById(Long id) {
+        return doctorRepository.findById(id);
+    }
+
+    public void deleteDoctor(Long id) {
+        doctorRepository.deleteById(id);
+    }
+
+    public Optional<Doctor> toggleAvailability(Long id, Boolean isAvailable) {
+        return doctorRepository.findById(id)
+                .map(doctor -> {
+                    doctor.setAvailable(isAvailable);
+                    return doctorRepository.save(doctor);
+                });
     }
 }

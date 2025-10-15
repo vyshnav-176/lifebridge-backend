@@ -23,7 +23,7 @@ public class AppointmentService {
         Optional<User> userOptional = userRepository.findById(appointment.getUser().getId());
         if (userOptional.isPresent()) {
             appointment.setUser(userOptional.get());
-            appointment.setStatus("PENDING");
+            appointment.setStatus("PENDING"); // Default status
             return appointmentRepository.save(appointment);
         }
         throw new RuntimeException("User not found with ID: " + appointment.getUser().getId());

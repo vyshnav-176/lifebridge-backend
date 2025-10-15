@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface HealthLogRepository extends JpaRepository<HealthLog, Long> {
-    // Find all logs by user ID, ordered by timestamp in descending order
+    // Find all logs by user ID, ordered by timestamp in descending order (most recent first)
     List<HealthLog> findByUser_IdOrderByTimestampDesc(Long userId);
 }

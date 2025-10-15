@@ -1,5 +1,6 @@
 package com.lifebridge.lifebridge_backend.controller;
 
+import com.lifebridge.lifebridge_backend.dto.RiskStatus;
 import com.lifebridge.lifebridge_backend.entity.HealthLog;
 import com.lifebridge.lifebridge_backend.service.HealthLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,12 @@ public class HealthLogController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(logs, HttpStatus.OK);
+    }
+
+    // NEW ENDPOINT: Get overall health risk status
+    @GetMapping("/risk/{userId}")
+    public ResponseEntity<RiskStatus> getHealthRiskStatus(@PathVariable Long userId) {
+        RiskStatus status = healthLogService.assessHealthRisk(userId);
+        return new ResponseEntity<>(status, HttpStatus.OK);
     }
 }
